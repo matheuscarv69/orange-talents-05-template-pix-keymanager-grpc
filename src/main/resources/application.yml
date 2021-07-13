@@ -1,3 +1,26 @@
 micronaut:
   application:
-    name: OT5KeyManagerGrpc
+    name: keyManagerGrpc
+
+datasources:
+  default:
+    url: ${$POSTGRES_URL:`jdbc:postgresql://localhost:5432/key-manager-grpc?currentSchema=desafio-pix`}
+    driverClassName: org.postgresql.Driver
+    username: ${POSTGRES_USERNAME:`postgres`}
+    password: ${POSTGRES_PASSWORD:`password`}
+    dialect: POSTGRES
+    schema-generate: CREATE_DROP
+
+# Jpa properties
+jpa.default.properties.hibernate.hbm2ddl.auto: update
+jpa.default.properties.hibernate.show_sql: true
+jpa.default.properties.hibernate.format_sql: true
+
+# external apis
+itau:
+  contas:
+    url: ${ITAU_URL:`http://localhost:9091`}
+
+bcb:
+  pix:
+    url: ${BCB_URL:`http://localhost:8082`}
