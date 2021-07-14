@@ -7,6 +7,12 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 @Entity
+@Table(
+    uniqueConstraints = [UniqueConstraint(
+        name = "uk_chave_pix",
+        columnNames = ["chave"]
+    )]
+)
 class ChavePix(
     @field:NotNull
     @Column(nullable = false)
@@ -34,5 +40,9 @@ class ChavePix(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
+
+    @field:NotBlank
+    @Column(nullable = false, unique = true)
+    val pixId: String = UUID.randomUUID().toString()
 
 }

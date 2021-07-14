@@ -76,7 +76,7 @@ internal class RegistrarChaveEndpointTest(
         // validacao
         with(response) {
             assertNotNull(pixId)
-            assertTrue(repository.existsById(pixId.toLong()))
+            assertTrue(repository.existsByPixId(pixId))
         }
     }
 
@@ -161,7 +161,6 @@ internal class RegistrarChaveEndpointTest(
         }
 
     }
-
 
     // Mockando o itau client
     @MockBean(ContasDeClientesItauClient::class)
