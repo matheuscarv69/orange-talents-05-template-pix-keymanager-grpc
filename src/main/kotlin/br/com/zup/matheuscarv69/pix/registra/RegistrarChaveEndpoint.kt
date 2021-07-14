@@ -24,7 +24,7 @@ class RegistrarChaveEndpoint(@Inject private val service: NovaChavePixService) :
         val chaveCriada = service.registra(novaChave)
 
         responseObserver.onNext(
-            RegistraChavePixResponse.newBuilder() // 1
+            RegistraChavePixResponse.newBuilder()
                 .setPixId(chaveCriada.id.toString())
                 .build()
         )

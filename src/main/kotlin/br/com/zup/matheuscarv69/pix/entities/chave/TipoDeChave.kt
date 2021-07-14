@@ -1,6 +1,6 @@
 package br.com.zup.matheuscarv69.pix.entities.chave
 
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator
 
 enum class TipoDeChave {

@@ -28,7 +28,7 @@ class ChavePix(
 
     @field:Valid
     @Embedded
-    val conta: ContaAssociada
+    val conta: ContaAssociada?
 ) {
 
     @Id
