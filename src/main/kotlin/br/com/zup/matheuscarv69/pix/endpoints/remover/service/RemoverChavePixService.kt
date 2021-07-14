@@ -1,0 +1,39 @@
+package br.com.zup.matheuscarv69.pix.endpoints.remover.service
+
+import br.com.zup.matheuscarv69.core.errorsHandler.exceptions.ChavePixNaoPertenceAoClienteException
+import br.com.zup.matheuscarv69.core.errorsHandler.exceptions.ChavePixNotFoundException
+import br.com.zup.matheuscarv69.pix.endpoints.remover.request.RemoverChaveRequest
+import br.com.zup.matheuscarv69.pix.repositories.ChavePixRepository
+import io.micronaut.validation.Validated
+import org.slf4j.LoggerFactory
+import javax.inject.Inject
+import javax.inject.Singleton
+import javax.transaction.Transactional
+import javax.validation.Valid
+
+@Validated
+@Singleton
+class RemoverChavePixService(@Inject private val repository: ChavePixRepository) {
+
+    private val LOGGER = LoggerFactory.getLogger(this::class.java)
+
+    @Transactional
+    fun remover(@Valid removerChaveRequest: RemoverChaveRequest) {
+        val possibleChavePix = repository.findByPixId(removerChaveRequest.pixId)
+
+        // 1. Verificar se o pixId informado existe
+        if (possibleChavePix.isEmpty)
+            throw ChavePixNotFoundException("Chave Pix não encontrada")
+
+        val chavePix = possibleChavePix.get()
+
+        // 2. Verificar se a chave pertence ao cliente
+        if (!chavePix.pertenceAoCliente(removerChaveRequest.clienteId))
+            throw ChavePixNaoPertenceAoClienteException("Chave Pix não pertence ao Cliente informado")
+
+        // 3. Excluir a chave pix do banco
+        LOGGER.info("Excluindo Chave Pix ${chavePix.tipoDeChave.name} : ${chavePix.pixId} ")
+        repository.deleteById(chavePix.id!!)
+    }
+
+}

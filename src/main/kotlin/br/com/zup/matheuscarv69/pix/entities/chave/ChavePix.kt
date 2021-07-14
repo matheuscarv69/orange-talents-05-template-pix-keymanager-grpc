@@ -45,4 +45,8 @@ class ChavePix(
     @Column(nullable = false, unique = true)
     val pixId: String = UUID.randomUUID().toString()
 
+    fun pertenceAoCliente(clienteId: String?): Boolean {
+        return this.clienteId == UUID.fromString(clienteId)
+    }
+
 }

@@ -24,6 +24,7 @@ class ConstraintViolationExceptionHandler : ExceptionHandler<ConstraintViolation
         val statusProto = com.google.rpc.Status.newBuilder()
             .setCode(Code.INVALID_ARGUMENT_VALUE)
             .setMessage("Dados inválidos")
+//            .setMessage(e.message) // mostra os erros da bean validation ao cliente
             .addDetails(Any.pack(details))
             .build()
 
