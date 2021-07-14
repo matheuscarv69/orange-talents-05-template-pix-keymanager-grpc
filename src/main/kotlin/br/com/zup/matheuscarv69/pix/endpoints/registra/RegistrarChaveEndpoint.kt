@@ -1,11 +1,11 @@
-package br.com.zup.matheuscarv69.pix.registra
+package br.com.zup.matheuscarv69.pix.endpoints.registra
 
 import br.com.zup.matheuscarv69.KeyManagerRegistraGrpcServiceGrpc
 import br.com.zup.matheuscarv69.RegistraChavePixRequest
 import br.com.zup.matheuscarv69.RegistraChavePixResponse
-import br.com.zup.matheuscarv69.core.errors.grpc.ErrorHandler
-import br.com.zup.matheuscarv69.pix.registra.request.toModel
-import br.com.zup.matheuscarv69.pix.registra.service.NovaChavePixService
+import br.com.zup.matheuscarv69.core.errorsHandler.ErrorHandler
+import br.com.zup.matheuscarv69.pix.endpoints.registra.request.toModel
+import br.com.zup.matheuscarv69.pix.endpoints.registra.service.NovaChavePixService
 import io.grpc.stub.StreamObserver
 import javax.inject.Inject
 import javax.inject.Singleton

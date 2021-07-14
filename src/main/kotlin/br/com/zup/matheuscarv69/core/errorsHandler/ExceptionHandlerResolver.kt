@@ -1,6 +1,6 @@
-package br.com.zup.matheuscarv69.core.errors.grpc
+package br.com.zup.matheuscarv69.core.errorsHandler
 
-import br.com.zup.matheuscarv69.core.errors.grpc.handlers.DefaultExceptionHandler
+import br.com.zup.matheuscarv69.core.errorsHandler.handlers.DefaultExceptionHandler
 import javax.inject.Inject
 import javax.inject.Singleton
 

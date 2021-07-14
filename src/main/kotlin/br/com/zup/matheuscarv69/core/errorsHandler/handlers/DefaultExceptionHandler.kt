@@ -1,6 +1,6 @@
-package br.com.zup.matheuscarv69.core.errors.grpc.handlers
+package br.com.zup.matheuscarv69.core.errorsHandler.handlers
 
-import br.com.zup.matheuscarv69.core.errors.grpc.ExceptionHandler
+import br.com.zup.matheuscarv69.core.errorsHandler.ExceptionHandler
 import io.grpc.Status
 
 /**

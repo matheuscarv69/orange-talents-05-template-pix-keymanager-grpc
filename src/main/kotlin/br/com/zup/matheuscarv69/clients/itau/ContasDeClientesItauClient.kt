@@ -1,4 +1,4 @@
-package br.com.zup.matheuscarv69.core.clients.itau
+package br.com.zup.matheuscarv69.clients.itau
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Get

@@ -1,3 +1,3 @@
-package br.com.zup.matheuscarv69.pix.exceptions
+package br.com.zup.matheuscarv69.core.errorsHandler.exceptions
 
 class ChavePixExistenteException(message: String?) : RuntimeException(message)

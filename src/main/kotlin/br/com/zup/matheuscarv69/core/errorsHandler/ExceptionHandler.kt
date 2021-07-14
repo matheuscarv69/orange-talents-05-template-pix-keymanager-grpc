@@ -1,4 +1,4 @@
-package br.com.zup.matheuscarv69.core.errors.grpc
+package br.com.zup.matheuscarv69.core.errorsHandler
 
 import io.grpc.Metadata
 import io.grpc.Status

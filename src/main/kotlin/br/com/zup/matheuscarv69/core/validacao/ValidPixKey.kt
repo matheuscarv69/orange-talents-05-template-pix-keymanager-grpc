@@ -1,6 +1,6 @@
 package br.com.zup.matheuscarv69.core.validacao
 
-import br.com.zup.matheuscarv69.pix.registra.request.NovaChaveRequest
+import br.com.zup.matheuscarv69.pix.endpoints.registra.request.NovaChaveRequest
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import io.micronaut.validation.validator.constraints.ConstraintValidatorContext

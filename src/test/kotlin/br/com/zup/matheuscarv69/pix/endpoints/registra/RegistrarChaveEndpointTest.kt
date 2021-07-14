@@ -1,13 +1,13 @@
-package br.com.zup.matheuscarv69.pix.registra
+package br.com.zup.matheuscarv69.pix.endpoints.registra
 
 import br.com.zup.matheuscarv69.KeyManagerRegistraGrpcServiceGrpc
 import br.com.zup.matheuscarv69.RegistraChavePixRequest
 import br.com.zup.matheuscarv69.TipoDeChaveGrpc
 import br.com.zup.matheuscarv69.TipoDeContaGrpc
-import br.com.zup.matheuscarv69.core.clients.itau.ContasDeClientesItauClient
-import br.com.zup.matheuscarv69.core.clients.itau.DadosDaContaResponse
-import br.com.zup.matheuscarv69.core.clients.itau.InstituicaoResponse
-import br.com.zup.matheuscarv69.core.clients.itau.TitularResponse
+import br.com.zup.matheuscarv69.clients.itau.ContasDeClientesItauClient
+import br.com.zup.matheuscarv69.clients.itau.DadosDaContaResponse
+import br.com.zup.matheuscarv69.clients.itau.InstituicaoResponse
+import br.com.zup.matheuscarv69.clients.itau.TitularResponse
 import br.com.zup.matheuscarv69.pix.entities.chave.ChavePix
 import br.com.zup.matheuscarv69.pix.entities.chave.TipoDeChave
 import br.com.zup.matheuscarv69.pix.entities.chave.TipoDeConta

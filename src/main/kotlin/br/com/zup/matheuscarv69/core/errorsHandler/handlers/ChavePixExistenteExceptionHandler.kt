@@ -1,8 +1,8 @@
-package br.com.zup.matheuscarv69.core.errors.grpc.handlers
+package br.com.zup.matheuscarv69.core.errorsHandler.handlers
 
-import br.com.zup.matheuscarv69.core.errors.grpc.ExceptionHandler.StatusWithDetails
-import br.com.zup.matheuscarv69.core.errors.grpc.ExceptionHandler
-import br.com.zup.matheuscarv69.pix.exceptions.ChavePixExistenteException
+import br.com.zup.matheuscarv69.core.errorsHandler.ExceptionHandler.StatusWithDetails
+import br.com.zup.matheuscarv69.core.errorsHandler.ExceptionHandler
+import br.com.zup.matheuscarv69.core.errorsHandler.exceptions.ChavePixExistenteException
 import io.grpc.Status
 import javax.inject.Singleton
 

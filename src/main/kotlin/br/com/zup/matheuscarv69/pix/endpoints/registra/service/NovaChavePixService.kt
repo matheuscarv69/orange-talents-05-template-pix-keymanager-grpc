@@ -1,9 +1,9 @@
-package br.com.zup.matheuscarv69.pix.registra.service
+package br.com.zup.matheuscarv69.pix.endpoints.registra.service
 
-import br.com.zup.matheuscarv69.core.clients.itau.ContasDeClientesItauClient
+import br.com.zup.matheuscarv69.clients.itau.ContasDeClientesItauClient
 import br.com.zup.matheuscarv69.pix.entities.chave.ChavePix
-import br.com.zup.matheuscarv69.pix.exceptions.ChavePixExistenteException
-import br.com.zup.matheuscarv69.pix.registra.request.NovaChaveRequest
+import br.com.zup.matheuscarv69.core.errorsHandler.exceptions.ChavePixExistenteException
+import br.com.zup.matheuscarv69.pix.endpoints.registra.request.NovaChaveRequest
 import br.com.zup.matheuscarv69.pix.repositories.ChavePixRepository
 import io.micronaut.validation.Validated
 import org.slf4j.LoggerFactory

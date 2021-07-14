@@ -1,4 +1,4 @@
-package br.com.zup.matheuscarv69.pix.registra.request
+package br.com.zup.matheuscarv69.pix.endpoints.registra.request
 
 import br.com.zup.matheuscarv69.RegistraChavePixRequest
 import br.com.zup.matheuscarv69.TipoDeChaveGrpc
