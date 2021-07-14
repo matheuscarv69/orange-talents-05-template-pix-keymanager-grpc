@@ -7,10 +7,10 @@ import javax.validation.constraints.NotBlank
 @Introspected
 data class RemoverChaveRequest(
     @field:NotBlank
-    @ValidUUID(message = "PixId com formato inválido")
+    @field:ValidUUID(message = "PixId com formato inválido")
     val pixId: String?,
 
     @field:NotBlank
-    @ValidUUID(message = "ClienteId com formato inválido")
+    @field:ValidUUID(message = "ClienteId com formato inválido")
     val clienteId: String?
 )
