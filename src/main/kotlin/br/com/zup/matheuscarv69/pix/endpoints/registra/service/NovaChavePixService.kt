@@ -7,10 +7,8 @@ import br.com.zup.matheuscarv69.core.errorsHandler.exceptions.ChavePixExistenteE
 import br.com.zup.matheuscarv69.pix.endpoints.registra.request.NovaChaveRequest
 import br.com.zup.matheuscarv69.pix.entities.chave.ChavePix
 import br.com.zup.matheuscarv69.pix.repositories.ChavePixRepository
-import io.micronaut.http.HttpStatus
 import io.micronaut.validation.Validated
 import org.slf4j.LoggerFactory
-import java.lang.RuntimeException
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.transaction.Transactional
@@ -46,7 +44,9 @@ class NovaChavePixService(
             LOGGER.info("Registrando chave Pix no Banco Central do Brasil: ${chave.chave}")
         }
 
-        val bcbResponse = bcbClient.registraPix(request).body() ?: throw RuntimeException("Deu ruim aqui")
+        val bcbResponse = bcbClient.registraPix(request).body()
+            ?: throw IllegalStateException("Erro ao registrar chave Pix no Banco Central do Brasil (BCB)")
+
 
         // 5. atualiza chave com valor retornado do bcb
         chave.atualizaChave(bcbResponse.key)

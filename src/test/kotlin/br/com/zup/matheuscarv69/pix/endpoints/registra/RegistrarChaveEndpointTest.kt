@@ -81,11 +81,40 @@ internal class RegistrarChaveEndpointTest(
                 .build()
         )
 
-
         // validacao
         with(response) {
             assertNotNull(pixId)
             assertTrue(repository.existsByPixId(pixId))
+        }
+    }
+
+    @Test
+    fun `Nao deve registrar chave pix quando ocorrer erro no BcbClient`() {
+
+        // cenario
+        Mockito.`when`(itauClient.buscaContaPorTipo(CLIENT_ID.toString(), TipoDeConta.CONTA_CORRENTE.name))
+            .thenReturn(HttpResponse.ok(dadosDaContaResponse()))
+
+        Mockito.`when`(bcbClient.registraPix(createPixKeyRequest()))
+            .thenReturn(HttpResponse.unprocessableEntity())
+        // acao
+
+        val errors = assertThrows<StatusRuntimeException> {
+            val response = grpcClient.registrar(
+                RegistraChavePixRequest
+                    .newBuilder()
+                    .setClienteId(CLIENT_ID.toString())
+                    .setTipoDeChave(TipoDeChaveGrpc.CPF)
+                    .setChave("02467781054")
+                    .setTipoDeConta(TipoDeContaGrpc.CONTA_CORRENTE)
+                    .build()
+            )
+        }
+
+        // validacao
+        with(errors) {
+            assertEquals(Status.FAILED_PRECONDITION.code, status.code)
+            assertEquals("Erro ao registrar chave Pix no Banco Central do Brasil (BCB)", status.description)
         }
     }
 

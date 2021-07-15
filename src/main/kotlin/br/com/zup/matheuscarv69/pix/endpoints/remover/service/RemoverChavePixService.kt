@@ -10,7 +10,6 @@ import br.com.zup.matheuscarv69.pix.repositories.ChavePixRepository
 import io.micronaut.http.HttpStatus
 import io.micronaut.validation.Validated
 import org.slf4j.LoggerFactory
-import java.lang.IllegalStateException
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.transaction.Transactional
