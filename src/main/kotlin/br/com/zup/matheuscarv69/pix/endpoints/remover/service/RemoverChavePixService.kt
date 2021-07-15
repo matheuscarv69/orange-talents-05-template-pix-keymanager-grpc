@@ -5,6 +5,7 @@ import br.com.zup.matheuscarv69.clients.bcb.DeletePixKeyRequest
 import br.com.zup.matheuscarv69.core.errorsHandler.exceptions.ChavePixNaoPertenceAoClienteException
 import br.com.zup.matheuscarv69.core.errorsHandler.exceptions.ChavePixNotFoundException
 import br.com.zup.matheuscarv69.pix.endpoints.remover.request.RemoverChaveRequest
+import br.com.zup.matheuscarv69.pix.entities.chave.ContaAssociada
 import br.com.zup.matheuscarv69.pix.repositories.ChavePixRepository
 import io.micronaut.http.HttpStatus
 import io.micronaut.validation.Validated
@@ -43,7 +44,7 @@ class RemoverChavePixService(
             key = chavePix.chave,
             request = DeletePixKeyRequest(
                 key = chavePix.chave,
-                participant = chavePix.conta!!.ispb
+                participant = ContaAssociada.ITAU_UNIBANCO_ISPB
             )
         ).also {
             LOGGER.info("Removendo chave Pix no Banco Central do Brasil: ${chavePix.chave}")
@@ -53,7 +54,7 @@ class RemoverChavePixService(
             throw IllegalStateException("Erro ao remover chave Pix no Banco Central do Brasil (BCB)")
 
         // 4. Excluir a chave pix do banco
-        LOGGER.info("Excluindo Chave Pix ${chavePix.tipoDeChave.name} : ${chavePix.pixId} ")
+        LOGGER.info("Excluindo Chave Pix ${chavePix.tipoDeChave.name} com o PixID ${chavePix.pixId} ")
         repository.deleteById(chavePix.id!!)
     }
 

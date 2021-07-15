@@ -149,7 +149,7 @@ internal class RemoverChaveEndpointTest(
     }
 
     // gerando dados
-    private fun criaChavePix() = ChavePix(
+    fun criaChavePix() = ChavePix(
         clienteId = CLIENT_ID,
         tipoDeChave = TipoDeChave.EMAIL,
         chave = "rafa.ponte@zup.com.br",
@@ -157,7 +157,7 @@ internal class RemoverChaveEndpointTest(
         conta = dadosDaContaResponse().toModel()
     )
 
-    private fun dadosDaContaResponse() = DadosDaContaResponse(
+    fun dadosDaContaResponse() = DadosDaContaResponse(
         tipo = TipoDeContaGrpc.CONTA_CORRENTE.name,
         instituicao = InstituicaoResponse(nome = "ITAÚ UNIBANCO S.A.", ispb = "60701190"),
         agencia = "0001",

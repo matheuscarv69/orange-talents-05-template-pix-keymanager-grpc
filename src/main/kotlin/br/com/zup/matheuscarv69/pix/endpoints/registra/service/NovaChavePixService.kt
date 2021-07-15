@@ -10,6 +10,7 @@ import br.com.zup.matheuscarv69.pix.repositories.ChavePixRepository
 import io.micronaut.http.HttpStatus
 import io.micronaut.validation.Validated
 import org.slf4j.LoggerFactory
+import java.lang.RuntimeException
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.transaction.Transactional
@@ -18,7 +19,7 @@ import javax.validation.Valid
 @Validated
 @Singleton
 class NovaChavePixService(
-    @Inject private val repository: ChavePixRepository,
+    @Inject val repository: ChavePixRepository,
     @Inject val itauClient: ContasDeClientesItauClient,
     @Inject val bcbClient: BcbClient
 ) {
@@ -41,15 +42,14 @@ class NovaChavePixService(
         repository.save(chave)
 
         // 4. envia chave para o sistema do BCB
-        val bcbResponse = bcbClient.registraPix(CreatePixKeyRequest(chave)).also {
+        val request = CreatePixKeyRequest.of(chave).also {
             LOGGER.info("Registrando chave Pix no Banco Central do Brasil: ${chave.chave}")
-
-            if (it.status != HttpStatus.CREATED)
-                throw IllegalStateException("Erro ao registrar chave Pix no Banco Central do Brasil (BCB)")
         }
 
+        val bcbResponse = bcbClient.registraPix(request).body() ?: throw RuntimeException("Deu ruim aqui")
+
         // 5. atualiza chave com valor retornado do bcb
-        chave.atualizaChave(bcbResponse.body()!!.key)
+        chave.atualizaChave(bcbResponse.key)
 
         // save explicito, nao necessario pois a chave esta em estado de managed
         repository.save(chave)

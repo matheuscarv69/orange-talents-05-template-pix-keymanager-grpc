@@ -4,11 +4,13 @@ import br.com.zup.matheuscarv69.KeyManagerRegistraGrpcServiceGrpc
 import br.com.zup.matheuscarv69.RegistraChavePixRequest
 import br.com.zup.matheuscarv69.TipoDeChaveGrpc
 import br.com.zup.matheuscarv69.TipoDeContaGrpc
+import br.com.zup.matheuscarv69.clients.bcb.*
 import br.com.zup.matheuscarv69.clients.itau.ContasDeClientesItauClient
 import br.com.zup.matheuscarv69.clients.itau.DadosDaContaResponse
 import br.com.zup.matheuscarv69.clients.itau.InstituicaoResponse
 import br.com.zup.matheuscarv69.clients.itau.TitularResponse
 import br.com.zup.matheuscarv69.pix.entities.chave.ChavePix
+import br.com.zup.matheuscarv69.pix.entities.chave.ContaAssociada
 import br.com.zup.matheuscarv69.pix.entities.chave.TipoDeChave
 import br.com.zup.matheuscarv69.pix.entities.chave.TipoDeConta
 import br.com.zup.matheuscarv69.pix.repositories.ChavePixRepository
@@ -26,6 +28,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito
+import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -38,6 +41,9 @@ internal class RegistrarChaveEndpointTest(
 
     @Inject
     lateinit var itauClient: ContasDeClientesItauClient
+
+    @Inject
+    lateinit var bcbClient: BcbClient
 
     companion object {
         val CLIENT_ID = UUID.randomUUID()!!
@@ -58,20 +64,23 @@ internal class RegistrarChaveEndpointTest(
     @Test
     fun `Deve cadastrar a chave pix`() {
         // Cenario
-        val request = RegistraChavePixRequest
-            .newBuilder()
-            .setClienteId(CLIENT_ID.toString())
-            .setTipoDeChave(TipoDeChaveGrpc.CPF)
-            .setChave("02467781054")
-            .setTipoDeConta(TipoDeContaGrpc.CONTA_CORRENTE)
-            .build()
-
-        // simulando request para o itau client
-        Mockito.`when`(itauClient.buscaContaPorTipo(request.clienteId, request.tipoDeConta.name))
+        Mockito.`when`(itauClient.buscaContaPorTipo(CLIENT_ID.toString(), TipoDeConta.CONTA_CORRENTE.name))
             .thenReturn(HttpResponse.ok(dadosDaContaResponse()))
 
+        Mockito.`when`(bcbClient.registraPix(createPixKeyRequest()))
+            .thenReturn(HttpResponse.created(createPixKeyResponse()))
+
         // acao
-        val response = grpcClient.registrar(request)
+        val response = grpcClient.registrar(
+            RegistraChavePixRequest
+                .newBuilder()
+                .setClienteId(CLIENT_ID.toString())
+                .setTipoDeChave(TipoDeChaveGrpc.CPF)
+                .setChave("02467781054")
+                .setTipoDeConta(TipoDeContaGrpc.CONTA_CORRENTE)
+                .build()
+        )
+
 
         // validacao
         with(response) {
@@ -168,6 +177,12 @@ internal class RegistrarChaveEndpointTest(
         return Mockito.mock(ContasDeClientesItauClient::class.java)
     }
 
+    // Mockando o bcb client
+    @MockBean(BcbClient::class)
+    fun bcbClient(): BcbClient? {
+        return Mockito.mock(BcbClient::class.java)
+    }
+
     // cria um client grpc pro endpoint de Registrar chave pix
     @Factory
     class Clients() {
@@ -178,15 +193,49 @@ internal class RegistrarChaveEndpointTest(
         }
     }
 
-    // gerando dados
-    private fun dadosDaContaResponse(): DadosDaContaResponse {
-        return DadosDaContaResponse(
-            tipo = TipoDeContaGrpc.CONTA_CORRENTE.name,
-            instituicao = InstituicaoResponse(nome = "ITAÚ UNIBANCO S.A.", ispb = "60701190"),
-            agencia = "0001",
-            numero = "291900",
-            titular = TitularResponse(nome = "Rafael M C Ponte", cpf = "02467781054")
+    // response itau request
+    private fun dadosDaContaResponse() = DadosDaContaResponse(
+        tipo = TipoDeContaGrpc.CONTA_CORRENTE.name,
+        instituicao = InstituicaoResponse(nome = "ITAÚ UNIBANCO S.A.", ispb = ContaAssociada.ITAU_UNIBANCO_ISPB),
+        agencia = "0001",
+        numero = "291900",
+        titular = TitularResponse(nome = "Rafael Ponte", cpf = "02467781054")
+    )
+
+
+    private fun createPixKeyRequest(): CreatePixKeyRequest {
+        return CreatePixKeyRequest(
+            keyType = PixKeyType.CPF,
+            key = "02467781054",
+            bankAccount = bankAccount(),
+            owner = owner()
         )
     }
 
+    private fun createPixKeyResponse(): CreatePixKeyResponse {
+        return CreatePixKeyResponse(
+            keyType = PixKeyType.CPF,
+            key = "02467781054",
+            bankAccount = bankAccount(),
+            owner = owner(),
+            createdAt = LocalDateTime.now()
+        )
+    }
+
+    private fun bankAccount(): BankAccount {
+        return BankAccount(
+            participant = ContaAssociada.ITAU_UNIBANCO_ISPB,
+            branch = "0001",
+            accountNumber = "291900",
+            accountType = BankAccount.AccountType.CACC
+        )
+    }
+
+    private fun owner(): Owner {
+        return Owner(
+            type = Owner.OwnerType.NATURAL_PERSON,
+            name = "Rafael Ponte",
+            taxIdNumber = "02467781054"
+        )
+    }
 }
