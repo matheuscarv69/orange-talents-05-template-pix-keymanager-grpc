@@ -1,8 +1,10 @@
 package br.com.zup.matheuscarv69.pix.entities.chave
 
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 import javax.validation.Valid
+import javax.validation.constraints.FutureOrPresent
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
@@ -37,6 +39,7 @@ class ChavePix(
     val conta: ContaAssociada?
 ) {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
@@ -44,6 +47,21 @@ class ChavePix(
     @field:NotBlank
     @Column(nullable = false, unique = true)
     val pixId: String = UUID.randomUUID().toString()
+
+    @Column(nullable = false)
+    val criadoEm: LocalDateTime = LocalDateTime.now()
+
+    fun atualizaChave(chave: String): Boolean {
+        if (isAleatoria()) {
+            this.chave = chave
+            return true
+        }
+        return false
+    }
+
+    fun isAleatoria(): Boolean {
+        return this.tipoDeChave == TipoDeChave.ALEATORIA
+    }
 
     fun pertenceAoCliente(clienteId: String?): Boolean {
         return this.clienteId == UUID.fromString(clienteId)

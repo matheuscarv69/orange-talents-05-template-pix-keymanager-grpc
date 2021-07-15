@@ -31,7 +31,7 @@ class ContaAssociada(
     val numeroDaConta: String
 ) {
 
-    companion object {
-        public val ITAU_UNIBANCO_ISPB: String = "60701190"
-    }
+    @Column(name = "conta_instituicao_ispb", nullable = false)
+    val ispb: String = "60701190"
+
 }
