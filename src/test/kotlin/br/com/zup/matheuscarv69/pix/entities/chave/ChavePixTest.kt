@@ -4,8 +4,7 @@ import br.com.zup.matheuscarv69.TipoDeContaGrpc
 import br.com.zup.matheuscarv69.clients.itau.DadosDaContaResponse
 import br.com.zup.matheuscarv69.clients.itau.InstituicaoResponse
 import br.com.zup.matheuscarv69.clients.itau.TitularResponse
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -37,11 +36,68 @@ internal class ChavePixTest {
         val chavePix = criaChavePix()
 
         // acao
-        val chavePertenceAoCliente = chavePix.pertenceAoCliente(clienteId = UUID.randomUUID().toString())
+        val chaveNaoPertenceAoCliente = chavePix.pertenceAoCliente(clienteId = UUID.randomUUID().toString())
+        val chavePertenceAoCliente = chavePix.pertenceAoCliente(clienteId = chavePix.clienteId.toString())
 
         // validacao
-        assertFalse(chavePertenceAoCliente)
+        assertFalse(chaveNaoPertenceAoCliente)
+        assertTrue(chavePertenceAoCliente)
     }
+
+    @Test
+    fun `Nao deve ser possivel atualizar a chave quando ela nao for do tipo ALEATORIA`() {
+
+        // cenario
+        val chavePix = criaChavePix()
+        val novaChave = "12345678910"
+
+        // acao
+        val isPossible = chavePix.atualizaChave(novaChave)
+
+        // validacao
+        assertNotNull(isPossible)
+        assertFalse(isPossible)
+
+    }
+
+    @Test
+    fun `Deve ser possivel atualizar a chave quando ela for do tipo ALEATORIA`() {
+        // cenario
+        val chavePix = ChavePix(
+            clienteId = CLIENT_ID,
+            tipoDeChave = TipoDeChave.ALEATORIA,
+            chave = "",
+            tipoDeConta = TipoDeConta.CONTA_CORRENTE,
+            conta = dadosDaContaResponse().toModel()
+        )
+        val novaChave = "12345678910"
+
+        // acao
+        val isPossible = chavePix.atualizaChave(novaChave)
+
+        // validacao
+        assertNotNull(isPossible)
+        assertTrue(isPossible)
+    }
+
+    @Test
+    fun `Deve ser verdadeiro quando a chave for do tipo ALEATORIA`() {
+        // cenario
+        val chavePix = ChavePix(
+            clienteId = CLIENT_ID,
+            tipoDeChave = TipoDeChave.ALEATORIA,
+            chave = "",
+            tipoDeConta = TipoDeConta.CONTA_CORRENTE,
+            conta = dadosDaContaResponse().toModel()
+        )
+        // acao
+        val isAleatoria = chavePix.isAleatoria()
+
+        // validacao
+        assertNotNull(isAleatoria)
+        assertTrue(isAleatoria)
+    }
+
 
     // gerando dados
     private fun criaChavePix() = ChavePix(
