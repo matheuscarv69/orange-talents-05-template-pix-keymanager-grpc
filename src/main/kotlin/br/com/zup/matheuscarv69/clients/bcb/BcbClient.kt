@@ -1,5 +1,6 @@
 package br.com.zup.matheuscarv69.clients.bcb
 
+import br.com.zup.matheuscarv69.pix.endpoints.detalharChave.response.ChavePixResponse
 import br.com.zup.matheuscarv69.pix.entities.chave.ChavePix
 import br.com.zup.matheuscarv69.pix.entities.chave.ContaAssociada
 import br.com.zup.matheuscarv69.pix.entities.chave.TipoDeChave
@@ -9,6 +10,7 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
 import java.time.LocalDateTime
+import java.util.*
 
 @Client("\${bcb.pix.url}")
 interface BcbClient {
@@ -27,6 +29,37 @@ interface BcbClient {
     )
     fun deletarPix(@PathVariable key: String, @Body request: DeletePixKeyRequest): HttpResponse<DeletePixKeyResponse>
 
+    @Get("/api/v1/pix/keys/{key}")
+    fun buscaPorChavePix(@PathVariable key: String): HttpResponse<PixKeyDetailsResponse>
+
+}
+
+data class PixKeyDetailsResponse(
+    val keyType: PixKeyType,
+    val key: String,
+    val bankAccount: BankAccount,
+    val owner: Owner,
+    val createdAt: LocalDateTime
+) {
+    fun toModel(): ChavePixResponse {
+        return ChavePixResponse(
+            pixId = "",
+            clienteId = UUID.fromString(""),
+            tipoDeChave = keyType.domainType!!,
+            chave = this.key,
+            tipoDeConta = when (this.bankAccount.accountType) {
+                BankAccount.AccountType.CACC -> TipoDeConta.CONTA_CORRENTE
+                BankAccount.AccountType.SVGS -> TipoDeConta.CONTA_POUPANCA
+            },
+            conta = ContaAssociada(
+                instituicao = bankAccount.participant,
+                nomeDoTitular = owner.name,
+                cpfDoTitular = owner.taxIdNumber,
+                agencia = bankAccount.branch,
+                numeroDaConta = bankAccount.accountNumber
+            )
+        )
+    }
 }
 
 data class CreatePixKeyRequest(

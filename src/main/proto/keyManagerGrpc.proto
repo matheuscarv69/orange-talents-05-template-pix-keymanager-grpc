@@ -6,22 +6,63 @@ option java_outer_classname = "KeyManagerGrpc";
 option objc_class_prefix = "HLW";
 
 package br.com.zup.matheuscarv69;
+import "google/protobuf/timestamp.proto";
 
 service KeyManagerRegistraGrpcService {
   rpc registrar (RegistraChavePixRequest) returns (RegistraChavePixResponse) {}
 }
 
 service KeyManagerRemoverService{
-  rpc remover(RemoverChavePixRequest) returns (RemoverChavePixResponse){}
+  rpc remover (RemoverChavePixRequest) returns (RemoverChavePixResponse){}
 }
 
-message RemoverChavePixRequest{
+service KeyManagerDetalhaChaveService{
+  rpc detalhar (DetalharChavePixRequest) returns (DetalharChavePixResponse){}
+}
+
+message DetalharChavePixRequest{
+  ChavePixRequest pixIdEClienteId = 1;
+  string chave = 2;
+
+  message ChavePixRequest{
+    string pixId = 1;
+    string clienteId = 2;
+  }
+}
+
+message DetalharChavePixResponse{
+
   string pixId = 1;
   string clienteId = 2;
+  ChavePixResponse chavePix = 3;
+
+  message ChavePixResponse{
+    TipoDeChaveGrpc tipoDeChave = 1;
+    string chave = 2;
+    ContaResponse conta = 3;
+    google.protobuf.Timestamp criadaEm = 4;
+  }
+
+  message ContaResponse {
+    TipoDeContaGrpc tipo = 1;
+    string instituicao = 2;
+    string nomeDoTitular = 3;
+    string cpfDoTitular = 4;
+    string agencia = 5;
+    string numeroDaConta = 6;
+  }
+
 }
 
-message RemoverChavePixResponse{
-  string mensagem = 1;
+message RegistraChavePixRequest {
+  string clienteId = 1;
+  TipoDeChaveGrpc tipoDeChave = 2;
+  string chave = 3;
+  TipoDeContaGrpc tipoDeConta = 4;
+}
+
+message RegistraChavePixResponse {
+  string pixId = 1;
 }
 
 enum TipoDeChaveGrpc{
@@ -38,13 +79,11 @@ enum TipoDeContaGrpc {
   CONTA_POUPANCA = 2;
 }
 
-message RegistraChavePixRequest {
-  string clienteId = 1;
-  TipoDeChaveGrpc tipoDeChave = 2;
-  string chave = 3;
-  TipoDeContaGrpc tipoDeConta = 4;
+message RemoverChavePixRequest{
+  string pixId = 1;
+  string clienteId = 2;
 }
 
-message RegistraChavePixResponse {
-  string pixId = 1;
+message RemoverChavePixResponse{
+  string mensagem = 1;
 }
