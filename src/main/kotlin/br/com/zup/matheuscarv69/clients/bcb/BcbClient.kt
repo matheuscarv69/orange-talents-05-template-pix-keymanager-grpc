@@ -35,8 +35,8 @@ interface BcbClient {
 }
 
 data class PixKeyDetailsResponse(
-    val keyType: PixKeyType,
-    val key: String,
+    val keyType: PixKeyType, // alterado pra var para testar um teste (so por curiosidade em um teste)
+    var key: String, // alterado pra var para testar um teste (so por curiosidade em um teste)
     val bankAccount: BankAccount,
     val owner: Owner,
     val createdAt: LocalDateTime
@@ -44,7 +44,7 @@ data class PixKeyDetailsResponse(
     fun toModel(): ChavePixResponse {
         return ChavePixResponse(
             pixId = "",
-            clienteId = UUID.fromString(""),
+            clienteId = "",
             tipoDeChave = keyType.domainType!!,
             chave = this.key,
             tipoDeConta = when (this.bankAccount.accountType) {
@@ -102,7 +102,7 @@ data class CreatePixKeyResponse(
 data class Owner(
     val type: OwnerType,
     val name: String,
-    val taxIdNumber: String
+    var taxIdNumber: String // alterado pra var para testar um teste (so por curiosidade em um teste)
 ) {
 
     enum class OwnerType {

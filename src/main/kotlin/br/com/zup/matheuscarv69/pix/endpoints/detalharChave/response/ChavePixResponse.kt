@@ -9,7 +9,7 @@ import java.util.*
 
 data class ChavePixResponse(
     val pixId: String? = UUID.randomUUID().toString(),
-    val clienteId: UUID?,
+    val clienteId: String?,
     val tipoDeChave: TipoDeChave,
     var chave: String,
     val tipoDeConta: TipoDeConta,
@@ -21,7 +21,7 @@ data class ChavePixResponse(
         fun of(chave: ChavePix): ChavePixResponse {
             return ChavePixResponse(
                 pixId = chave.pixId,
-                clienteId = chave.clienteId,
+                clienteId = chave.clienteId.toString(),
                 tipoDeChave = chave.tipoDeChave,
                 chave = chave.chave,
                 tipoDeConta = chave.tipoDeConta,
