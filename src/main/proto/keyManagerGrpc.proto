@@ -20,6 +20,27 @@ service KeyManagerDetalhaChaveService{
   rpc detalhar (DetalharChavePixRequest) returns (DetalharChavePixResponse){}
 }
 
+service KeyManagerListaChavesService{
+  rpc lista (ListaChavesRequest) returns (ListaChavesResponse){}
+}
+
+message ListaChavesRequest{
+  string clienteId = 1;
+}
+
+message ListaChavesResponse{
+  string clienteId = 1;
+  repeated ChaveResponse chaves = 2;
+
+  message ChaveResponse {
+    string pixId = 1;
+    TipoDeChaveGrpc tipoDeChave = 2;
+    string chave = 3;
+    TipoDeContaGrpc tipoDeConta = 4;
+    google.protobuf.Timestamp criadaEm = 5;
+  }
+}
+
 message DetalharChavePixRequest{
   ChavePixRequest pixIdEClienteId = 1;
   string chave = 2;
