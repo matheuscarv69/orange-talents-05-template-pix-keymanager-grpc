@@ -4,7 +4,7 @@ micronaut:
 
 datasources:
   default:
-    url: ${$POSTGRES_URL:`jdbc:postgresql://localhost:5432/key-manager-grpc?currentSchema=desafio-pix`}
+    url: jdbc:postgresql://${POSTGRES_HOST:`localhost:5432`}/key-manager-grpc?currentSchema=desafio-pix
     driverClassName: org.postgresql.Driver
     username: ${POSTGRES_USERNAME:`postgres`}
     password: ${POSTGRES_PASSWORD:`password`}
